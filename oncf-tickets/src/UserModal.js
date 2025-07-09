@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 
-function UserModal({ show, onHide, onCreate }) {
+function UserModal({ show, onHide, onSave }) {
   const [form, setForm] = useState({
     username: "",
     password: "",
@@ -14,7 +14,7 @@ function UserModal({ show, onHide, onCreate }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onCreate(form);
+    onSave(form);
     setForm({ username: "", password: "", role: "USER" });
     onHide();
   };

@@ -36,3 +36,29 @@
     transform: rotate(360deg);
   }
 }
+
+/* Icônes rondes et colorées pour les actions */
+.action-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  color: #fff;
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.icon-edit {
+  background: #FFC107; /* jaune */
+}
+.icon-delete {
+  background: #F44336; /* rouge */
+}
+.action-icon:hover {
+  filter: brightness(0.9);
+}
