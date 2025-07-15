@@ -5,9 +5,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import TicketModal from "./TicketModal";
 import UserModal from "./UserModal";
 import LoginPage from "./LoginPage";
-import { Modal } from "react-bootstrap";
+import { Modal, Overlay, Popover, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen, faTrash, faPlus, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPen, faTrash, faPlus, faUserPlus, faSort, faSortUp, faSortDown, faBars } from '@fortawesome/free-solid-svg-icons';
 import AdminPage from './admin/AdminPage';
 
 function App() {
@@ -39,6 +39,107 @@ function App() {
   const [transferTargetId, setTransferTargetId] = useState("");
   const [transferError, setTransferError] = useState("");
   const [pendingDeleteUser, setPendingDeleteUser] = useState(null);
+
+  // Remplace le tableau des tickets utilisateur par un tableau avancé
+  const [ticketItemsPerPage, setTicketItemsPerPage] = useState(10);
+  const [ticketCurrentPage, setTicketCurrentPage] = useState(1);
+  const [ticketSortConfig, setTicketSortConfig] = useState({ key: 'id', direction: 'desc' });
+  const [ticketColumnFilters, setTicketColumnFilters] = useState({});
+  const [ticketFilterTypes, setTicketFilterTypes] = useState({});
+  const [ticketPopoverCol, setTicketPopoverCol] = useState(null);
+  const ticketPopoverRefs = {
+    id: useRef(null), titre: useRef(null), etat: useRef(null), user: useRef(null), type: useRef(null), famille: useRef(null), operateur: useRef(null), nature: useRef(null), equipement: useRef(null), ligne: useRef(null), priorite: useRef(null), description: useRef(null)
+  };
+  const ticketFilterTypeOptions = [
+    { value: 'contains', label: 'Contient' },
+    { value: 'equals', label: 'Égal à' },
+    { value: 'starts', label: 'Commence par' },
+  ];
+  const ticketColumns = [
+    { key: 'id', label: 'ID' },
+    { key: 'titre', label: 'Titre' },
+    { key: 'etat', label: 'État' },
+    { key: 'user', label: 'Créé par' },
+    { key: 'type', label: 'Type' },
+    { key: 'famille', label: 'Famille' },
+    { key: 'operateur', label: 'Opérateur' },
+    { key: 'nature', label: 'Nature' },
+    { key: 'equipement', label: 'Équipement' },
+    { key: 'ligne', label: 'Ligne' },
+    { key: 'priorite', label: 'Priorité' },
+    { key: 'description', label: 'Description' },
+  ];
+  const ticketFiltered = tickets.filter(ticket => {
+    return Object.entries(ticketColumnFilters).every(([key, value]) => {
+      if (!value) return true;
+      const type = ticketFilterTypes[key] || 'contains';
+      let field = key === 'user' ? (ticket.user?.username || '') : (ticket[key] || '');
+      field = field.toString().toLowerCase();
+      const val = value.toLowerCase();
+      if (type === 'contains') return field.includes(val);
+      if (type === 'equals') return field === val;
+      if (type === 'starts') return field.startsWith(val);
+      return true;
+    });
+  });
+  const ticketSorted = [...ticketFiltered].sort((a, b) => {
+    let aValue = a[ticketSortConfig.key];
+    let bValue = b[ticketSortConfig.key];
+    if (ticketSortConfig.key === 'user') {
+      aValue = a.user?.username || '';
+      bValue = b.user?.username || '';
+    }
+    if (aValue < bValue) return ticketSortConfig.direction === 'asc' ? -1 : 1;
+    if (aValue > bValue) return ticketSortConfig.direction === 'asc' ? 1 : -1;
+    return 0;
+  });
+  const ticketPageCount = Math.ceil(ticketSorted.length / ticketItemsPerPage);
+  const ticketPaginated = ticketSorted.slice((ticketCurrentPage - 1) * ticketItemsPerPage, ticketCurrentPage * ticketItemsPerPage);
+  const handleTicketSort = (key, direction = null) => {
+    let dir = direction;
+    if (!dir) {
+      dir = 'asc';
+      if (ticketSortConfig.key === key && ticketSortConfig.direction === 'asc') dir = 'desc';
+    }
+    setTicketSortConfig({ key, direction: dir });
+  };
+  const handleTicketFilterChange = (key, value) => {
+    setTicketColumnFilters(f => ({ ...f, [key]: value }));
+    setTicketCurrentPage(1);
+  };
+  const handleTicketFilterTypeChange = (key, value) => {
+    setTicketFilterTypes(f => ({ ...f, [key]: value }));
+  };
+  const handleTicketClearSort = () => {
+    setTicketSortConfig({ key: 'id', direction: 'desc' });
+  };
+  const renderTicketSortIcon = (key) => {
+    if (ticketSortConfig.key !== key) return <FontAwesomeIcon icon={faSort} className="ms-1 text-secondary" />;
+    return ticketSortConfig.direction === 'asc'
+      ? <FontAwesomeIcon icon={faSortUp} className="ms-1 text-primary" />
+      : <FontAwesomeIcon icon={faSortDown} className="ms-1 text-primary" />;
+  };
+  const renderTicketFilterPopover = (col) => (
+    <Popover id={`popover-${col}`}>
+      <Popover.Body>
+        <Form.Group className="mb-2">
+          <Form.Label visuallyHidden>Type de filtre</Form.Label>
+          <Form.Select size="sm" value={ticketFilterTypes[col] || 'contains'} onChange={e => handleTicketFilterTypeChange(col, e.target.value)}>
+            {ticketFilterTypeOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+          </Form.Select>
+        </Form.Group>
+        <Form.Group className="mb-2">
+          <Form.Label visuallyHidden>Valeur</Form.Label>
+          <Form.Control size="sm" placeholder="Filtrer..." value={ticketColumnFilters[col] || ''} onChange={e => handleTicketFilterChange(col, e.target.value)} />
+        </Form.Group>
+        <div className="d-flex flex-column gap-1">
+          <Button variant="outline-primary" size="sm" onClick={() => handleTicketSort(col, 'asc')}><FontAwesomeIcon icon={faSortUp} className="me-1" /> Sort Ascending</Button>
+          <Button variant="outline-primary" size="sm" onClick={() => handleTicketSort(col, 'desc')}><FontAwesomeIcon icon={faSortDown} className="me-1" /> Sort Descending</Button>
+          <Button variant="outline-secondary" size="sm" onClick={handleTicketClearSort}><FontAwesomeIcon icon={faSort} className="me-1" /> Clear sort</Button>
+        </div>
+      </Popover.Body>
+    </Popover>
+  );
 
   const axiosInstance = axios.create({
     baseURL: "http://localhost:8080",
@@ -281,17 +382,6 @@ function App() {
         <FontAwesomeIcon icon={faPlus} className="me-2" />
         Nouveau Ticket
       </Button>
-      {userRole === "ADMIN" && (
-        <>
-          <Button className="mb-3 ms-2" variant="success" onClick={() => setShowUserModal(true)}>
-            <FontAwesomeIcon icon={faUserPlus} className="me-2" />
-            Créer un utilisateur
-          </Button>
-          <Button className="mb-3 ms-2" variant="info" onClick={() => { setShowUserList(true); fetchUserList(); }}>
-            Lister les utilisateurs
-          </Button>
-        </>
-      )}
       <div className="mb-3">
         <input
           type="text"
@@ -301,91 +391,101 @@ function App() {
           onChange={handleSearchChange}
         />
       </div>
-      {loading ? (
-        <div>Chargement...</div>
-      ) : (
-        <div>
-          {paginatedTickets.length === 0 ? (
-            <div className="alert alert-info">Aucun ticket à afficher.</div>
-          ) : (
-            <table className="table table-striped table-bordered" style={{ width: "100%" }}>
-              <thead>
-                <tr>
-                  <th onClick={() => handleSort("titre")} style={{ cursor: "pointer" }}>Titre {sortConfig.key === "titre" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}</th>
-                  <th onClick={() => handleSort("etat")} style={{ cursor: "pointer" }}>État {sortConfig.key === "etat" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}</th>
-                  <th onClick={() => handleSort("user")} style={{ cursor: "pointer" }}>Créé par {sortConfig.key === "user" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}</th>
-                  <th onClick={() => handleSort("type")} style={{ cursor: "pointer" }}>Type {sortConfig.key === "type" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}</th>
-                  <th onClick={() => handleSort("famille")} style={{ cursor: "pointer" }}>Famille {sortConfig.key === "famille" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}</th>
-                  <th onClick={() => handleSort("operateur")} style={{ cursor: "pointer" }}>Opérateur {sortConfig.key === "operateur" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}</th>
-                  <th onClick={() => handleSort("nature")} style={{ cursor: "pointer" }}>Nature {sortConfig.key === "nature" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}</th>
-                  <th onClick={() => handleSort("equipement")} style={{ cursor: "pointer" }}>Équipement {sortConfig.key === "equipement" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}</th>
-                  <th onClick={() => handleSort("ligne")} style={{ cursor: "pointer" }}>Ligne {sortConfig.key === "ligne" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}</th>
-                  <th onClick={() => handleSort("priorite")} style={{ cursor: "pointer" }}>Priorité {sortConfig.key === "priorite" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}</th>
-                  <th onClick={() => handleSort("description")} style={{ cursor: "pointer" }}>Description {sortConfig.key === "description" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedTickets.map((ticket) => (
-                  <tr key={ticket.id}>
-                    <td>{ticket.titre}</td>
-                    <td>{ticket.etat}</td>
-                    <td>{ticket.user ? ticket.user.username : 'N/A'}</td>
-                    <td>{ticket.type}</td>
-                    <td>{ticket.famille}</td>
-                    <td>{ticket.operateur}</td>
-                    <td>{ticket.nature}</td>
-                    <td>{ticket.equipement}</td>
-                    <td>{ticket.ligne}</td>
-                    <td>{ticket.priorite}</td>
-                    <td>{ticket.description}</td>
-                    <td className="text-center">
-                      <div className="d-flex justify-content-center align-items-center" style={{gap: '0.5rem'}}>
-                        <span
-                          className="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center"
-                          style={{ width: 36, height: 36, fontSize: '1.2rem', cursor: 'pointer' }}
-                          title="Modifier"
-                          onClick={() => openModal(ticket)}
-                        >
-                          <FontAwesomeIcon icon={faPen} />
-                        </span>
-                        {userRole === "ADMIN" && (
-                          <span
-                            className="bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center"
-                            style={{ width: 36, height: 36, fontSize: '1.2rem', cursor: 'pointer' }}
-                            title="Supprimer"
-                            onClick={() => handleDelete(ticket.id)}
-                          >
-                            <FontAwesomeIcon icon={faTrash} />
-                          </span>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-          {/* Pagination */}
-          {pageCount > 1 && (
-            <nav>
-              <ul className="pagination justify-content-center">
-                <li className={`page-item${currentPage === 1 ? " disabled" : ""}`}>
-                  <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>&laquo;</button>
-                </li>
-                {[...Array(pageCount)].map((_, idx) => (
-                  <li key={idx + 1} className={`page-item${currentPage === idx + 1 ? " active" : ""}`}>
-                    <button className="page-link" onClick={() => setCurrentPage(idx + 1)}>{idx + 1}</button>
-                  </li>
-                ))}
-                <li className={`page-item${currentPage === pageCount ? " disabled" : ""}`}>
-                  <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === pageCount}>&raquo;</button>
-                </li>
-              </ul>
-            </nav>
-          )}
+      <div className="table-responsive w-100">
+        <div className="d-flex justify-content-between align-items-center px-3 pt-3">
+          <div className="d-flex align-items-center gap-2">
+            <select className="form-select form-select-sm w-auto" value={ticketItemsPerPage} onChange={e => { setTicketItemsPerPage(Number(e.target.value)); setTicketCurrentPage(1); }}>
+              {[10, 25, 50, 100].map(n => <option key={n} value={n}>{n}</option>)}
+            </select>
+            <span className="ms-2">entries per page</span>
+          </div>
+          <div className="d-flex align-items-center gap-2">
+            <span className="me-2">Search:</span>
+            <input
+              type="text"
+              className="form-control form-control-sm w-auto"
+              placeholder="Rechercher..."
+              value={search}
+              onChange={e => { setSearch(e.target.value); setTicketCurrentPage(1); }}
+            />
+          </div>
         </div>
-      )}
+        <table className="table table-bordered align-middle mb-0 mt-2 w-100">
+          <thead className="table-light align-middle">
+            <tr>
+              {ticketColumns.map(col => (
+                <th key={col.key} style={{ fontWeight: 'bold', textAlign: 'center', verticalAlign: 'middle', minWidth: col.key === 'id' ? 50 : col.key === 'equipement' ? 70 : 90, width: col.key === 'id' ? 50 : col.key === 'equipement' ? 70 : undefined, maxWidth: col.key === 'equipement' ? 70 : undefined, overflow: col.key === 'equipement' ? 'hidden' : undefined, textOverflow: col.key === 'equipement' ? 'ellipsis' : undefined }}>
+                  <div>{col.label}</div>
+                  <div className="d-flex justify-content-center align-items-center mt-1" style={{gap: '0.3rem'}}>
+                    <span style={{fontSize: '1rem', cursor: 'pointer'}} onClick={() => handleTicketSort(col.key)}>{renderTicketSortIcon(col.key)}</span>
+                    <span ref={ticketPopoverRefs[col.key]} style={{fontSize: '1rem', cursor: 'pointer'}}>
+                      <FontAwesomeIcon icon={faBars} className="text-secondary" onClick={e => { e.stopPropagation(); setTicketPopoverCol(ticketPopoverCol === col.key ? null : col.key); }} />
+                    </span>
+                    <Overlay show={ticketPopoverCol === col.key} target={ticketPopoverRefs[col.key].current} placement="bottom" containerPadding={20} rootClose onHide={() => setTicketPopoverCol(null)}>
+                      {renderTicketFilterPopover(col.key)}
+                    </Overlay>
+                  </div>
+                </th>
+              ))}
+              <th className="text-center" style={{ fontWeight: 'bold', verticalAlign: 'middle' }}>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ticketPaginated.length === 0 ? (
+              <tr><td colSpan={ticketColumns.length + 1} className="text-center">Aucun ticket à afficher.</td></tr>
+            ) : ticketPaginated.map((ticket) => (
+              <tr key={ticket.id}>
+                {ticketColumns.map(col => (
+                  <td key={col.key} style={{ textAlign: 'center', maxWidth: col.key === 'equipement' ? 70 : undefined, overflow: col.key === 'equipement' ? 'hidden' : undefined, textOverflow: col.key === 'equipement' ? 'ellipsis' : undefined }}>
+                    {col.key === 'user' ? (ticket.user ? ticket.user.username : 'N/A') : ticket[col.key]}
+                  </td>
+                ))}
+                <td className="text-center">
+                  <div className="d-flex justify-content-center align-items-center" style={{gap: '0.5rem'}}>
+                    <span
+                      className="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center"
+                      style={{ width: 36, height: 36, fontSize: '1.2rem', cursor: 'pointer' }}
+                      title="Modifier"
+                      onClick={() => openModal(ticket)}
+                    >
+                      <FontAwesomeIcon icon={faPen} />
+                    </span>
+                    {/* Pas de suppression si pas admin */}
+                    {userRole === "ADMIN" && (
+                      <span
+                        className="bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center"
+                        style={{ width: 36, height: 36, fontSize: '1.2rem', cursor: 'pointer' }}
+                        title="Supprimer"
+                        onClick={() => handleDelete(ticket.id)}
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </span>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {ticketPageCount > 1 && (
+          <nav className="mt-2">
+            <ul className="pagination justify-content-center mb-0">
+              <li className={`page-item${ticketCurrentPage === 1 ? " disabled" : ""}`}>
+                <button className="page-link" onClick={() => setTicketCurrentPage(ticketCurrentPage - 1)} disabled={ticketCurrentPage === 1}>&laquo;</button>
+              </li>
+              {[...Array(ticketPageCount)].map((_, idx) => (
+                <li key={idx + 1} className={`page-item${ticketCurrentPage === idx + 1 ? " active" : ""}`}>
+                  <button className="page-link" onClick={() => setTicketCurrentPage(idx + 1)}>{idx + 1}</button>
+                </li>
+              ))}
+              <li className={`page-item${ticketCurrentPage === ticketPageCount ? " disabled" : ""}`}>
+                <button className="page-link" onClick={() => setTicketCurrentPage(ticketCurrentPage + 1)} disabled={ticketCurrentPage === ticketPageCount}>&raquo;</button>
+              </li>
+            </ul>
+          </nav>
+        )}
+      </div>
+      {/* Pagination supprimée ici (déjà gérée en bas du tableau) */}
       <TicketModal
         show={showModal}
         onHide={() => setShowModal(false)}
