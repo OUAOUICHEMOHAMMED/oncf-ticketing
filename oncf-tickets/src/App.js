@@ -8,18 +8,21 @@ import LoginPage from "./LoginPage";
 import { Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faTrash, faPlus, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import AdminPage from './admin/AdminPage';
 
 function App() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLogged, setIsLogged] = useState(false);
+  // Initialisation de l'état depuis localStorage
+  const getLocal = (key, def = "") => localStorage.getItem(key) || def;
+  const [username, setUsername] = useState(getLocal("username"));
+  const [password, setPassword] = useState(getLocal("password"));
+  const [isLogged, setIsLogged] = useState(getLocal("isLogged") === "true");
   const [loginError, setLoginError] = useState("");
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [editingTicket, setEditingTicket] = useState(null);
   const [showUserModal, setShowUserModal] = useState(false);
-  const [userRole, setUserRole] = useState("");
+  const [userRole, setUserRole] = useState(getLocal("userRole"));
   const [search, setSearch] = useState("");
   const [sortConfig, setSortConfig] = useState({ key: "id", direction: "desc" });
   const [currentPage, setCurrentPage] = useState(1);
@@ -42,6 +45,7 @@ function App() {
     auth: isLogged ? { username, password } : undefined,
   });
 
+  // Sauvegarde dans localStorage à la connexion
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -50,11 +54,15 @@ function App() {
       });
       setIsLogged(true);
       setLoginError("");
+      localStorage.setItem("isLogged", "true");
+      localStorage.setItem("username", username);
+      localStorage.setItem("password", password);
       fetchTickets(username, password);
       const userRes = await axios.get("http://localhost:8080/api/users/me", {
         auth: { username, password },
       });
       setUserRole(userRes.data.role);
+      localStorage.setItem("userRole", userRes.data.role);
     } catch (err) {
       setLoginError("Identifiants invalides ou erreur serveur.");
     }
@@ -185,12 +193,23 @@ function App() {
     setUsername("");
     setPassword("");
     setUserRole("");
+    localStorage.removeItem("isLogged");
+    localStorage.removeItem("username");
+    localStorage.removeItem("password");
+    localStorage.removeItem("userRole");
   };
 
   useEffect(() => {
     if (isLogged) fetchTickets();
     // eslint-disable-next-line
   }, [isLogged]);
+
+  // Synchronise userRole dans localStorage si modifié (ex: édition profil)
+  useEffect(() => {
+    if (isLogged && userRole) {
+      localStorage.setItem("userRole", userRole);
+    }
+  }, [userRole, isLogged]);
 
   // Recherche et tri
   const filteredTickets = tickets.filter(ticket =>
@@ -245,6 +264,11 @@ function App() {
         loginError={loginError}
       />
     );
+  }
+
+  // Affichage conditionnel : admin dashboard ou login classique
+  if (isLogged && userRole === 'ADMIN') {
+    return <AdminPage onLogout={handleLogout} />;
   }
 
   return (
@@ -379,6 +403,13 @@ function App() {
           <Modal.Title>Liste des utilisateurs</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          {/* Bouton Ajouter utilisateur */}
+          <div className="mb-3 d-flex justify-content-end">
+            <Button variant="success" onClick={() => setShowUserModal(true)}>
+              <FontAwesomeIcon icon={faUserPlus} className="me-2" />
+              Ajouter utilisateur
+            </Button>
+          </div>
           {userListLoading ? (
             <div>Chargement...</div>
           ) : userList.length === 0 ? (
