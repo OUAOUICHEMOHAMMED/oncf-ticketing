@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faTrash, faSort, faSortUp, faSortDown, faBars } from '@fortawesome/free-solid-svg-icons';
-import { Overlay, Popover, Button, Form } from 'react-bootstrap';
+import { Overlay, Popover, Button, Form, Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 function UserTable({ users = [], onEdit, onDelete, onAdd }) {
   const [search, setSearch] = useState("");
@@ -111,7 +111,7 @@ function UserTable({ users = [], onEdit, onDelete, onAdd }) {
   ];
 
   return (
-    <div className="card mt-4">
+    <div className="card mt-4" style={{ maxWidth: 1200, margin: '32px auto', background: '#fff', borderRadius: 12, boxShadow: '0 2px 16px rgba(0,0,0,0.08)', padding: 24 }}>
       <div className="d-flex justify-content-between align-items-center px-3 pt-3">
         <div className="d-flex align-items-center gap-2">
           <select className="form-select form-select-sm w-auto" value={itemsPerPage} onChange={e => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}>
@@ -134,7 +134,7 @@ function UserTable({ users = [], onEdit, onDelete, onAdd }) {
         </div>
       </div>
       <div className="table-responsive">
-        <table className="table table-bordered align-middle mb-0 mt-2">
+        <table className="table table-bordered align-middle mb-0 mt-2 w-100 user-table-modern">
           <thead className="table-light align-middle">
             <tr>
               {columns.map(col => (
@@ -160,15 +160,21 @@ function UserTable({ users = [], onEdit, onDelete, onAdd }) {
             ) : paginated.map((user, idx) => (
               <tr key={user.id}>
                 {columns.map(col => (
-                  <td key={col.key} style={{ textAlign: 'center', maxWidth: col.key === 'email' ? 90 : undefined, overflow: col.key === 'email' ? 'hidden' : undefined, textOverflow: col.key === 'email' ? 'ellipsis' : undefined }}>
-                    {user[col.key] || '-'}
+                  <td key={col.key} style={{ textAlign: 'center', verticalAlign: 'middle', minWidth: col.key === 'id' ? 50 : col.key === 'email' ? 90 : 90, maxWidth: col.key === 'email' ? 120 : undefined, overflow: col.key === 'email' ? 'hidden' : undefined, textOverflow: col.key === 'email' ? 'ellipsis' : undefined, whiteSpace: col.key === 'email' ? 'nowrap' : undefined }}>
+                    {col.key === 'email' && user[col.key] && user[col.key] !== '-' ? (
+                      <OverlayTrigger placement="top" overlay={<Tooltip>{user[col.key]}</Tooltip>}>
+                        <span style={{ display: 'inline-block', maxWidth: 110, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', verticalAlign: 'middle' }}>{user[col.key]}</span>
+                      </OverlayTrigger>
+                    ) : (
+                      user[col.key] || '-'
+                    )}
                   </td>
                 ))}
                 <td className="text-center">
                   <div className="d-flex justify-content-center align-items-center" style={{gap: '0.5rem'}}>
                     <span
                       className="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center"
-                      style={{ width: 32, height: 32, fontSize: '1.1rem', cursor: 'pointer' }}
+                      style={{ width: 36, height: 36, fontSize: '1.2rem', cursor: 'pointer' }}
                       title="Modifier"
                       onClick={() => onEdit && onEdit(user)}
                     >
@@ -176,7 +182,7 @@ function UserTable({ users = [], onEdit, onDelete, onAdd }) {
                     </span>
                     <span
                       className="bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center"
-                      style={{ width: 32, height: 32, fontSize: '1.1rem', cursor: 'pointer' }}
+                      style={{ width: 36, height: 36, fontSize: '1.2rem', cursor: 'pointer' }}
                       title="Supprimer"
                       onClick={() => onDelete && onDelete(user)}
                     >
