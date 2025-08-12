@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
+import './AdminPage.css';
 import Dashboard from './Dashboard';
 import UserTable from './UserTable';
 import TicketTable from './TicketTable';
@@ -13,11 +14,25 @@ const axiosInstance = axios.create({
   auth: { username, password }
 });
 
-function AdminPage({ onLogout }) {
+function AdminPage({ onLogout, currentUsername }) {
   const [current, setCurrent] = useState('dashboard');
   const [users, setUsers] = useState([]);
   const [tickets, setTickets] = useState([]);
-  const [stats, setStats] = useState({ totalTickets: 0, openTickets: 0, totalUsers: 0, adminUsers: 0, newTickets: 0 });
+  const [stats, setStats] = useState({ 
+    totalTickets: 0, 
+    openTickets: 0, 
+    totalUsers: 0, 
+    adminUsers: 0, 
+    newTickets: 0,
+    resolvedTickets: 0
+  });
+
+  // Informations de l'utilisateur connecté
+  const [currentUser, setCurrentUser] = useState({
+    name: currentUsername || 'Admin',
+    email: `${currentUsername}@oncf.ma`,
+    role: 'ADMIN'
+  });
 
   // Modale édition utilisateur
   const [showEditUser, setShowEditUser] = useState(false);
@@ -65,23 +80,100 @@ function AdminPage({ onLogout }) {
   const fetchTickets = async () => {
     try {
       const res = await axiosInstance.get('/api/tickets');
-      setTickets(res.data);
-      setStats(s => ({
-        ...s,
-        totalTickets: res.data.length,
-        openTickets: res.data.filter(t => t.etat && t.etat.toLowerCase() !== 'clos').length,
-        newTickets: res.data.filter(t => t.etat && t.etat.toLowerCase() === 'nouveau').length
-      }));
+      const ticketsData = res.data;
+      setTickets(ticketsData);
+      
+      // Calculs statistiques améliorés
+      const today = new Date().toDateString();
+      const newTicketsToday = ticketsData.filter(t => {
+        if (t.dateCreation) {
+          return new Date(t.dateCreation).toDateString() === today;
+        }
+        return false;
+      }).length;
+
+      const openTicketsCount = ticketsData.filter(t => 
+        t.etat && t.etat.toLowerCase() !== 'clos' && t.etat.toLowerCase() !== 'fermé'
+      ).length;
+
+      const resolvedTicketsCount = ticketsData.filter(t => 
+        t.etat && (t.etat.toLowerCase() === 'clos' || t.etat.toLowerCase() === 'fermé' || t.etat.toLowerCase() === 'résolu')
+      ).length;
+
+      const statsCalculated = {
+        totalTickets: ticketsData.length,
+        openTickets: openTicketsCount,
+        newTickets: newTicketsToday,
+        resolvedTickets: resolvedTicketsCount
+      };
+
+      setStats(s => ({ ...s, ...statsCalculated }));
     } catch (e) {
       setTickets([]);
-      setStats(s => ({ ...s, totalTickets: 0, openTickets: 0, newTickets: 0 }));
+    }
+  };
+
+  // Fetch current user info
+  const fetchCurrentUser = async () => {
+    try {
+      // Essayer d'abord l'API current user
+      const res = await axiosInstance.get('/api/users/current');
+      if (res.data) {
+        setCurrentUser({
+          name: res.data.username || currentUsername || 'Admin',
+          email: res.data.email || `${currentUsername}@oncf.ma`,
+          role: res.data.role || 'ADMIN'
+        });
+      }
+    } catch (e) {
+      // Si l'API n'existe pas, chercher l'utilisateur dans la liste des utilisateurs
+      try {
+        const usersRes = await axiosInstance.get('/api/users');
+        const currentUserFromList = usersRes.data.find(user => user.username === currentUsername);
+        
+        if (currentUserFromList) {
+          setCurrentUser({
+            name: currentUserFromList.username,
+            email: currentUserFromList.email || `${currentUsername}@oncf.ma`,
+            role: currentUserFromList.role || 'ADMIN'
+          });
+        } else {
+          // Fallback aux données par défaut
+          setCurrentUser({
+            name: currentUsername || 'Admin',
+            email: `${currentUsername}@oncf.ma`,
+            role: 'ADMIN'
+          });
+        }
+      } catch (usersError) {
+        // Fallback aux données par défaut
+        console.log('Impossible de récupérer les informations utilisateur, utilisation des données par défaut');
+        setCurrentUser({
+          name: currentUsername || 'Admin',
+          email: `${currentUsername}@oncf.ma`,
+          role: 'ADMIN'
+        });
+      }
     }
   };
 
   useEffect(() => {
     fetchUsers();
     fetchTickets();
-  }, []);
+    fetchCurrentUser();
+  }, [currentUsername]); // Add currentUsername to dependency array
+
+  // Mettre à jour les informations utilisateur quand le username change
+  useEffect(() => {
+    if (currentUsername) {
+      setCurrentUser(prev => ({
+        ...prev,
+        name: currentUsername,
+        email: `${currentUsername}@oncf.ma`
+      }));
+      fetchCurrentUser();
+    }
+  }, [currentUsername]);
 
   // Actions utilisateur
   const handleEditUser = (user) => {
@@ -183,15 +275,34 @@ function AdminPage({ onLogout }) {
     }
   };
 
+  // Fonction pour naviguer vers les tickets
+  const handleNavigateToTickets = (section = 'tickets') => {
+    setCurrent(section);
+  };
+
   return (
-    <div className="d-flex" style={{ minHeight: '100vh' }}>
+    <div className="d-flex admin-page" style={{ minHeight: '100vh' }}>
       <Sidebar current={current} onNavigate={setCurrent} onLogout={onLogout} />
-      <div className="flex-grow-1 bg-light">
+      <div className="flex-grow-1 bg-light" style={{ marginLeft: '220px' }}>
         <div className="container-fluid py-3">
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h2 className="mb-0">Dashboard Admin</h2>
           </div>
-          {current === 'dashboard' && <Dashboard {...stats} />}
+          {current === 'dashboard' && (
+            <Dashboard
+              totalTickets={stats.totalTickets}
+              openTickets={stats.openTickets}
+              totalUsers={stats.totalUsers}
+              adminUsers={stats.adminUsers}
+              newTickets={stats.newTickets}
+              resolvedTickets={stats.resolvedTickets}
+              tickets={tickets}
+              users={users}
+              currentUser={{ name: currentUsername, email: `${currentUsername}@oncf.ma`, role: 'ADMIN' }}
+              onNavigateToTickets={handleNavigateToTickets}
+              onLogout={onLogout}
+            />
+          )}
           {current === 'users' && <UserTable users={users} onEdit={handleEditUser} onDelete={handleDeleteUserConfirm} onAdd={handleAddUser} />}
           {current === 'tickets' && <TicketTable tickets={tickets} users={users} onEdit={handleEditTicket} onDelete={handleDeleteTicketConfirm} />}
         </div>

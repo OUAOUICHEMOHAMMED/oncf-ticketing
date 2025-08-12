@@ -1,0 +1,77 @@
+/* Styles spécifiques à AdminPage avec les nouveaux dégradés violet/rose */
+.admin-page .bg-primary { 
+  background: var(--gradient-primary) !important; 
+  background-color: #8B5CF6 !important; /* Fallback */
+}
+
+.admin-page .btn-primary { 
+  background: var(--gradient-primary) !important; 
+  background-color: #8B5CF6 !important; /* Fallback */
+  border: none !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: all 0.3s ease !important;
+}
+
+.admin-page .btn-primary:hover { 
+  background: var(--gradient-primary-hover) !important; 
+  background-color: #7C3AED !important; /* Fallback */
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3) !important;
+}
+
+.admin-page .text-primary { 
+  color: #8B5CF6 !important; 
+}
+
+.admin-page .border-primary { 
+  border: 2px solid transparent !important;
+  background: linear-gradient(white, white) padding-box, var(--gradient-primary) border-box !important;
+}
+
+.admin-page .btn-outline-primary {
+  color: #8B5CF6 !important;
+  border: 2px solid transparent !important;
+  background: linear-gradient(white, white) padding-box, var(--gradient-primary) border-box !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: all 0.3s ease !important;
+}
+
+.admin-page .btn-outline-primary:hover {
+  background: var(--gradient-primary) !important;
+  border-color: transparent !important;
+  color: white !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3) !important;
+}
+
+.admin-page .badge.bg-primary {
+  background: var(--gradient-primary) !important;
+  background-color: #8B5CF6 !important; /* Fallback */
+}
+
+.admin-page .progress-bar.bg-primary {
+  background: var(--gradient-primary) !important;
+  background-color: #8B5CF6 !important; /* Fallback */
+}
+
+.admin-page .form-control:focus {
+  border-color: #8B5CF6 !important;
+  box-shadow: 0 0 0 0.2rem rgba(139, 92, 246, 0.25) !important;
+}
+
+.admin-page .nav-link.active.bg-primary {
+  background: var(--gradient-primary) !important;
+  background-color: #8B5CF6 !important; /* Fallback */
+}
+
+.admin-page .modal-header {
+  background: var(--gradient-primary-light) !important;
+  background-color: #A78BFA !important; /* Fallback */
+}
+
+.admin-page .card-header {
+  background: var(--gradient-primary-light) !important;
+  background-color: #A78BFA !important; /* Fallback */
+} 

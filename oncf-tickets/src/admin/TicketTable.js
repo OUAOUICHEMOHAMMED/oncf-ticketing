@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import './TicketTable.css';
 import { faPen, faTrash, faSort, faSortUp, faSortDown, faBars } from '@fortawesome/free-solid-svg-icons';
 import { Overlay, Popover, Button, Form } from 'react-bootstrap';
 
@@ -16,10 +17,6 @@ function TicketTable({ tickets = [], users = [], onEdit, onDelete }) {
   const popoverRefs = {
     id: useRef(null), titre: useRef(null), etat: useRef(null), user: useRef(null), type: useRef(null), famille: useRef(null), operateur: useRef(null), nature: useRef(null), equipement: useRef(null), ligne: useRef(null), priorite: useRef(null), description: useRef(null)
   };
-
-  // Valeurs uniques pour les selects
-  const etatOptions = Array.from(new Set(tickets.map(t => t.etat).filter(Boolean)));
-  const prioriteOptions = Array.from(new Set(tickets.map(t => t.priorite).filter(Boolean)));
 
   // Types de filtre disponibles
   const filterTypeOptions = [
@@ -131,7 +128,7 @@ function TicketTable({ tickets = [], users = [], onEdit, onDelete }) {
   ];
 
   return (
-    <div className="card mt-4">
+    <div className="card mt-4 ticket-table">
       <div className="d-flex justify-content-between align-items-center px-3 pt-3">
         <div className="d-flex align-items-center gap-2">
           <select className="form-select form-select-sm w-auto" value={itemsPerPage} onChange={e => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}>

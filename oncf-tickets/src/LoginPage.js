@@ -1,9 +1,10 @@
 import React from "react";
 import { Button, Alert } from "react-bootstrap";
+import "./LoginPage.css";
 
 function LoginPage({ username, setUsername, password, setPassword, handleLogin, loginError }) {
   return (
-    <div className="login-bg d-flex align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
+    <div className="login-bg d-flex align-items-center justify-content-center login-page" style={{ minHeight: "100vh" }}>
       <div className="login-card shadow p-4 rounded-4" style={{ background: "#232837", maxWidth: 400, width: "100%" }}>
         <div className="text-center mb-4">
           <img
@@ -11,7 +12,7 @@ function LoginPage({ username, setUsername, password, setPassword, handleLogin, 
             alt="ONCF Logo"
             style={{ width: 200, marginBottom: 10 }}
           />
-          <h2 style={{ fontWeight: 700, color: "#fff", letterSpacing: 1 }}>ONCF Helpdesk</h2>
+          <h2 style={{ fontWeight: 700, color: "#fff", letterSpacing: 1 }}>ONCF TicketPro</h2>
         </div>
         <form onSubmit={handleLogin}>
           <div className="mb-3">

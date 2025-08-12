@@ -1,0 +1,77 @@
+/* Styles spécifiques à UserTable avec les nouveaux dégradés violet/rose */
+.user-table .bg-primary { 
+  background: var(--gradient-primary) !important; 
+  background-color: #8B5CF6 !important; /* Fallback */
+}
+
+.user-table .btn-primary { 
+  background: var(--gradient-primary) !important; 
+  background-color: #8B5CF6 !important; /* Fallback */
+  border: none !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: all 0.3s ease !important;
+}
+
+.user-table .btn-primary:hover { 
+  background: var(--gradient-primary-hover) !important; 
+  background-color: #7C3AED !important; /* Fallback */
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3) !important;
+}
+
+.user-table .text-primary { 
+  color: #8B5CF6 !important; 
+}
+
+.user-table .border-primary { 
+  border: 2px solid transparent !important;
+  background: linear-gradient(white, white) padding-box, var(--gradient-primary) border-box !important;
+}
+
+.user-table .btn-outline-primary {
+  color: #8B5CF6 !important;
+  border: 2px solid transparent !important;
+  background: linear-gradient(white, white) padding-box, var(--gradient-primary) border-box !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: all 0.3s ease !important;
+}
+
+.user-table .btn-outline-primary:hover {
+  background: var(--gradient-primary) !important;
+  border-color: transparent !important;
+  color: white !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3) !important;
+}
+
+.user-table .badge.bg-primary {
+  background: var(--gradient-primary) !important;
+  background-color: #8B5CF6 !important; /* Fallback */
+}
+
+.user-table .progress-bar.bg-primary {
+  background: var(--gradient-primary) !important;
+  background-color: #8B5CF6 !important; /* Fallback */
+}
+
+.user-table .form-control:focus {
+  border-color: #8B5CF6 !important;
+  box-shadow: 0 0 0 0.2rem rgba(139, 92, 246, 0.25) !important;
+}
+
+.user-table .nav-link.active.bg-primary {
+  background: var(--gradient-primary) !important;
+  background-color: #8B5CF6 !important; /* Fallback */
+}
+
+.user-table .table-hover tbody tr:hover {
+  background: linear-gradient(135deg, rgba(75, 0, 130, 0.1) 0%, rgba(128, 0, 128, 0.1) 15%, rgba(153, 50, 204, 0.1) 30%, rgba(186, 85, 211, 0.1) 45%, rgba(147, 112, 219, 0.1) 60%, rgba(138, 43, 226, 0.1) 75%, rgba(139, 92, 246, 0.1) 100%) !important;
+}
+
+.user-table .pagination .page-item.active .page-link {
+  background: var(--gradient-primary) !important;
+  background-color: #8B5CF6 !important; /* Fallback */
+  border-color: #8B5CF6 !important;
+} 

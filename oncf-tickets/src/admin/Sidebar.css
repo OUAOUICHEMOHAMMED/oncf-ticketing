@@ -1,0 +1,88 @@
+/* Styles spécifiques à la Sidebar avec les nouveaux dégradés violet/rose */
+.sidebar .bg-primary { 
+  background: var(--gradient-primary) !important; 
+  background-color: #8B5CF6 !important; /* Fallback */
+}
+
+.sidebar .text-primary { 
+  color: #8B5CF6 !important; 
+}
+
+.sidebar .border-primary { 
+  border: 2px solid transparent !important;
+  background: linear-gradient(white, white) padding-box, var(--gradient-primary) border-box !important;
+}
+
+.sidebar .nav-link.active.bg-primary { 
+  background: var(--gradient-primary) !important; 
+  background-color: #8B5CF6 !important; /* Fallback */
+}
+
+.sidebar .nav-link.active { 
+  background: var(--gradient-primary) !important; 
+  background-color: #8B5CF6 !important; /* Fallback */
+  color: white !important;
+}
+
+.sidebar .nav-link:hover {
+  background: var(--gradient-primary-light) !important;
+  background-color: #A78BFA !important; /* Fallback */
+  color: white !important;
+}
+
+.sidebar .nav-link:focus {
+  background: var(--gradient-primary-light) !important;
+  background-color: #A78BFA !important; /* Fallback */
+  color: white !important;
+}
+
+.sidebar .brand {
+  background: var(--gradient-primary) !important;
+  background-color: #8B5CF6 !important; /* Fallback */
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+.sidebar .btn-primary {
+  background: var(--gradient-primary) !important;
+  background-color: #8B5CF6 !important; /* Fallback */
+  border: none !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: all 0.3s ease !important;
+}
+
+.sidebar .btn-primary:hover {
+  background: var(--gradient-primary-hover) !important;
+  background-color: #7C3AED !important; /* Fallback */
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3) !important;
+}
+
+.sidebar .btn-outline-primary {
+  color: #8B5CF6 !important;
+  border: 2px solid transparent !important;
+  background: linear-gradient(white, white) padding-box, var(--gradient-primary) border-box !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: all 0.3s ease !important;
+}
+
+.sidebar .btn-outline-primary:hover {
+  background: var(--gradient-primary) !important;
+  border-color: transparent !important;
+  color: white !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3) !important;
+}
+
+.sidebar .badge.bg-primary {
+  background: var(--gradient-primary) !important;
+  background-color: #8B5CF6 !important; /* Fallback */
+}
+
+.sidebar .progress-bar.bg-primary {
+  background: var(--gradient-primary) !important;
+  background-color: #8B5CF6 !important; /* Fallback */
+} 

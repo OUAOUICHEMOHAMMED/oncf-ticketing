@@ -1,0 +1,182 @@
+/* Couleurs personnalisées avec dégradés purple foncé vers violet (60% purple, 40% violet) */
+:root {
+  --custom-primary: #8B5CF6; /* Violet/rose principal */
+  --custom-primary-dark: #7C3AED; /* Version plus foncée */
+  --custom-primary-light: #A78BFA; /* Version plus claire */
+  --custom-primary-hover: #9333EA; /* Version pour le hover */
+  
+  /* Dégradés personnalisés - Purple foncé vers Violet (60% purple, 40% violet) */
+  --gradient-primary: linear-gradient(135deg, #4B0082 0%, #800080 15%, #9932CC 30%, #BA55D3 45%, #9370DB 60%, #8A2BE2 75%, #8B5CF6 100%);
+  --gradient-primary-hover: linear-gradient(135deg, #2E0854 0%, #4B0082 15%, #800080 30%, #9932CC 45%, #8A2BE2 60%, #7C3AED 75%, #6D28D9 100%);
+  --gradient-primary-light: linear-gradient(135deg, #9370DB 0%, #BA55D3 15%, #DDA0DD 30%, #E6E6FA 45%, #A78BFA 60%, #C4B5FD 75%, #DDD6FE 100%);
+  --gradient-primary-dark: linear-gradient(135deg, #2E0854 0%, #4B0082 15%, #800080 30%, #9932CC 45%, #8A2BE2 60%, #7C3AED 75%, #6D28D9 100%);
+  --gradient-primary-vertical: linear-gradient(180deg, #4B0082 0%, #800080 15%, #9932CC 30%, #BA55D3 45%, #9370DB 60%, #8A2BE2 75%, #8B5CF6 100%);
+  --gradient-primary-radial: radial-gradient(circle, #4B0082 0%, #800080 15%, #9932CC 30%, #BA55D3 45%, #9370DB 60%, #8A2BE2 75%, #8B5CF6 100%);
+}
+
+/* Remplacement de la classe bg-primary Bootstrap par un dégradé */
+.bg-primary {
+  background: var(--gradient-primary) !important;
+  background-color: var(--custom-primary) !important; /* Fallback */
+}
+
+.bg-primary-dark {
+  background: var(--gradient-primary-dark) !important;
+  background-color: var(--custom-primary-dark) !important; /* Fallback */
+}
+
+.bg-primary-light {
+  background: var(--gradient-primary-light) !important;
+  background-color: var(--custom-primary-light) !important; /* Fallback */
+}
+
+/* Remplacement des boutons btn-primary avec dégradés */
+.btn-primary {
+  background: var(--gradient-primary) !important;
+  background-color: var(--custom-primary) !important; /* Fallback */
+  border: none !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-primary:hover {
+  background: var(--gradient-primary-hover) !important;
+  background-color: var(--custom-primary-hover) !important; /* Fallback */
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3) !important;
+}
+
+.btn-primary:focus {
+  background: var(--gradient-primary-hover) !important;
+  background-color: var(--custom-primary-hover) !important; /* Fallback */
+  box-shadow: 0 0 0 0.2rem rgba(139, 92, 246, 0.25) !important;
+}
+
+.btn-primary:active {
+  background: var(--gradient-primary-dark) !important;
+  background-color: var(--custom-primary-dark) !important; /* Fallback */
+  transform: translateY(0) !important;
+}
+
+/* Remplacement des boutons outline avec dégradés au hover */
+.btn-outline-primary {
+  color: var(--custom-primary) !important;
+  border: 2px solid transparent !important;
+  background: linear-gradient(white, white) padding-box, var(--gradient-primary) border-box !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-outline-primary:hover {
+  background: var(--gradient-primary) !important;
+  border-color: transparent !important;
+  color: white !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3) !important;
+}
+
+.btn-outline-primary:focus {
+  box-shadow: 0 0 0 0.2rem rgba(139, 92, 246, 0.25) !important;
+}
+
+/* Remplacement des badges avec dégradés */
+.badge.bg-primary {
+  background: var(--gradient-primary) !important;
+  background-color: var(--custom-primary) !important; /* Fallback */
+}
+
+/* Remplacement des progress bars avec dégradés */
+.progress-bar.bg-primary {
+  background: var(--gradient-primary) !important;
+  background-color: var(--custom-primary) !important; /* Fallback */
+}
+
+/* Remplacement des liens */
+.text-primary {
+  color: var(--custom-primary) !important;
+}
+
+/* Remplacement des bordures avec dégradés */
+.border-primary {
+  border: 2px solid transparent !important;
+  background: linear-gradient(white, white) padding-box, var(--gradient-primary) border-box !important;
+}
+
+/* Remplacement des backgrounds avec opacité */
+.bg-primary.bg-opacity-20 {
+  background: linear-gradient(135deg, rgba(75, 0, 130, 0.2) 0%, rgba(128, 0, 128, 0.2) 15%, rgba(153, 50, 204, 0.2) 30%, rgba(186, 85, 211, 0.2) 45%, rgba(147, 112, 219, 0.2) 60%, rgba(138, 43, 226, 0.2) 75%, rgba(139, 92, 246, 0.2) 100%) !important;
+}
+
+.bg-primary.bg-opacity-10 {
+  background: linear-gradient(135deg, rgba(75, 0, 130, 0.1) 0%, rgba(128, 0, 128, 0.1) 15%, rgba(153, 50, 204, 0.1) 30%, rgba(186, 85, 211, 0.1) 45%, rgba(147, 112, 219, 0.1) 60%, rgba(138, 43, 226, 0.1) 75%, rgba(139, 92, 246, 0.1) 100%) !important;
+}
+
+/* Dégradés améliorés */
+.bg-gradient-primary {
+  background: var(--gradient-primary) !important;
+}
+
+.bg-gradient-primary-hover {
+  background: var(--gradient-primary-hover) !important;
+}
+
+.bg-gradient-primary-light {
+  background: var(--gradient-primary-light) !important;
+}
+
+.bg-gradient-primary-dark {
+  background: var(--gradient-primary-dark) !important;
+}
+
+.bg-gradient-primary-vertical {
+  background: var(--gradient-primary-vertical) !important;
+}
+
+.bg-gradient-primary-radial {
+  background: var(--gradient-primary-radial) !important;
+}
+
+/* Remplacement des focus states */
+.form-control:focus {
+  border-color: var(--custom-primary) !important;
+  box-shadow: 0 0 0 0.2rem rgba(139, 92, 246, 0.25) !important;
+}
+
+/* Remplacement des active states dans la sidebar */
+.nav-link.active.bg-primary {
+  background: var(--gradient-primary) !important;
+  background-color: var(--custom-primary) !important; /* Fallback */
+}
+
+/* Remplacement des icônes avec couleur primaire */
+.text-primary {
+  color: var(--custom-primary) !important;
+}
+
+/* Effets de dégradé supplémentaires */
+.gradient-text {
+  background: var(--gradient-primary) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+.gradient-border {
+  border: 2px solid transparent !important;
+  background: linear-gradient(white, white) padding-box, var(--gradient-primary) border-box !important;
+}
+
+/* Animation de dégradé */
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animated-gradient {
+  background: var(--gradient-primary) !important;
+  background-size: 200% 200% !important;
+  animation: gradient-shift 3s ease infinite !important;
+} 

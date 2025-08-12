@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./custom-colors.css";
+import "./Modal.css";
 import TicketModal from "./TicketModal";
 import UserModal from "./UserModal";
 import LoginPage from "./LoginPage";
@@ -18,15 +20,14 @@ function App() {
   const [isLogged, setIsLogged] = useState(getLocal("isLogged") === "true");
   const [loginError, setLoginError] = useState("");
   const [tickets, setTickets] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [editingTicket, setEditingTicket] = useState(null);
   const [showUserModal, setShowUserModal] = useState(false);
   const [userRole, setUserRole] = useState(getLocal("userRole"));
   const [search, setSearch] = useState("");
-  const [sortConfig, setSortConfig] = useState({ key: "id", direction: "desc" });
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  // const [sortConfig, setSortConfig] = useState({ key: "id", direction: "desc" }); // Variables non utilisées
+  // const [currentPage, setCurrentPage] = useState(1); // Variable non utilisée
+  // const itemsPerPage = 10; // Variable non utilisée
   const [showUserList, setShowUserList] = useState(false);
   const [userList, setUserList] = useState([]);
   const [userListLoading, setUserListLoading] = useState(false);
@@ -38,7 +39,6 @@ function App() {
   const [userToTransfer, setUserToTransfer] = useState(null);
   const [transferTargetId, setTransferTargetId] = useState("");
   const [transferError, setTransferError] = useState("");
-  const [pendingDeleteUser, setPendingDeleteUser] = useState(null);
 
   // Remplace le tableau des tickets utilisateur par un tableau avancé
   const [ticketItemsPerPage, setTicketItemsPerPage] = useState(10);
@@ -170,7 +170,7 @@ function App() {
   };
 
   const fetchTickets = async (u = username, p = password) => {
-    setLoading(true);
+    // setLoading(true); // Variable non utilisée
     try {
       const res = await axios.get("http://localhost:8080/api/tickets", {
         auth: { username: u, password: p },
@@ -179,7 +179,7 @@ function App() {
     } catch (err) {
       setTickets([]);
     }
-    setLoading(false);
+    // setLoading(false); // Variable non utilisée
   };
 
   const openModal = (ticket = null) => {
@@ -262,7 +262,6 @@ function App() {
       const msg = err.response?.data?.message || err.message;
       if (msg.includes("tickets associés")) {
         setUserToTransfer(user);
-        setPendingDeleteUser(user);
         setShowTransferModal(true);
         setTransferError("");
       } else {
@@ -313,45 +312,29 @@ function App() {
   }, [userRole, isLogged]);
 
   // Recherche et tri
-  const filteredTickets = tickets.filter(ticket =>
-    Object.values(ticket)
-      .join(" ")
-      .toLowerCase()
-      .includes(search.toLowerCase()) ||
-    (ticket.user && ticket.user.username && ticket.user.username.toLowerCase().includes(search.toLowerCase()))
-  );
-
-  const sortedTickets = React.useMemo(() => {
-    if (!sortConfig.key) return filteredTickets;
-    const sorted = [...filteredTickets].sort((a, b) => {
-      let aValue = a[sortConfig.key];
-      let bValue = b[sortConfig.key];
-      if (sortConfig.key === "user") {
-        aValue = a.user?.username || "";
-        bValue = b.user?.username || "";
-      }
-      if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
-      if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
-      return 0;
-    });
-    return sorted;
-  }, [filteredTickets, sortConfig]);
+  // const filteredTickets = tickets.filter(ticket => // Variable non utilisée
+  //   Object.values(ticket)
+  //     .join(" ")
+  //     .toLowerCase()
+  //     .includes(search.toLowerCase()) ||
+  //   (ticket.user && ticket.user.username && ticket.user.username.toLowerCase().includes(search.toLowerCase()))
+  // );
 
   // Pagination
-  const pageCount = Math.ceil(sortedTickets.length / itemsPerPage);
-  const paginatedTickets = sortedTickets.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  // const pageCount = Math.ceil(sortedTickets.length / itemsPerPage); // Variable non utilisée
+  // const paginatedTickets = sortedTickets.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage); // Variable non utilisée
 
-  const handleSort = (key) => {
-    let direction = "asc";
-    if (sortConfig.key === key && sortConfig.direction === "asc") {
-      direction = "desc";
-    }
-    setSortConfig({ key, direction });
-  };
+  // const handleSort = (key) => { // Fonction non utilisée
+  //   let direction = "asc";
+  //   if (sortConfig.key === key && sortConfig.direction === "asc") {
+  //     direction = "desc";
+  //   }
+  //   setSortConfig({ key, direction });
+  // };
 
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
-    setCurrentPage(1);
+    // setCurrentPage(1); // Variable currentPage n'existe plus
   };
 
   if (!isLogged) {
@@ -368,14 +351,14 @@ function App() {
   }
 
   // Affichage conditionnel : admin dashboard ou login classique
-  if (isLogged && userRole === 'ADMIN') {
-    return <AdminPage onLogout={handleLogout} />;
+  if (isLogged && userRole === "ADMIN") {
+    return <AdminPage onLogout={handleLogout} currentUsername={username} />;
   }
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 app-container">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2>Gestion des Tickets ONCF</h2>
+        <h2>ONCF TicketPro</h2>
         <Button variant="outline-danger" onClick={handleLogout}>Déconnexion</Button>
       </div>
       <Button className="mb-3" onClick={() => openModal()}>

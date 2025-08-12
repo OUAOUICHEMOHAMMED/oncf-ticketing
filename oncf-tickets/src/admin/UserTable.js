@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import './UserTable.css';
 import { faPen, faTrash, faSort, faSortUp, faSortDown, faBars } from '@fortawesome/free-solid-svg-icons';
 import { Overlay, Popover, Button, Form, Tooltip, OverlayTrigger } from 'react-bootstrap';
 
@@ -111,7 +112,7 @@ function UserTable({ users = [], onEdit, onDelete, onAdd }) {
   ];
 
   return (
-    <div className="card mt-4" style={{ maxWidth: 1200, margin: '32px auto', background: '#fff', borderRadius: 12, boxShadow: '0 2px 16px rgba(0,0,0,0.08)', padding: 24 }}>
+    <div className="card mt-4 user-table" style={{ maxWidth: 1200, margin: '32px auto', background: '#fff', borderRadius: 12, boxShadow: '0 2px 16px rgba(0,0,0,0.08)', padding: 24 }}>
       <div className="d-flex justify-content-between align-items-center px-3 pt-3">
         <div className="d-flex align-items-center gap-2">
           <select className="form-select form-select-sm w-auto" value={itemsPerPage} onChange={e => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}>
