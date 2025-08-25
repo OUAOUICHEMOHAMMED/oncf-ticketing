@@ -356,119 +356,170 @@ function App() {
   }
 
   return (
-    <div className="container mt-5 app-container">
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2>ONCF TicketPro</h2>
-        <Button variant="outline-danger" onClick={handleLogout}>Déconnexion</Button>
+    <div style={{ 
+      width: '100%', 
+      maxWidth: '1400px', 
+      margin: '0 auto',
+      padding: '20px',
+      backgroundColor: '#f8f9fa',
+      minHeight: '100vh'
+    }}>
+      {/* En-tête avec titre et bouton principal - Même style que admin */}
+      <div style={{
+        background: 'linear-gradient(135deg, #1a1a2e 0%, #2d2d44 50%, #8B5CF6 100%)',
+        padding: '30px',
+        borderRadius: '12px',
+        marginBottom: '20px',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
+        width: '100%'
+      }}>
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <h2 style={{
+              color: 'white',
+              fontSize: '2.5rem',
+              fontWeight: '700',
+              marginBottom: '8px',
+              textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)'
+            }}>ONCF TicketPro</h2>
+            <p style={{
+              color: '#e0e0e0',
+              fontSize: '1.1rem',
+              marginBottom: '0',
+              opacity: '0.9'
+            }}>Gestion et suivi de vos incidents et demandes</p>
+          </div>
+          <div className="d-flex align-items-center gap-3">
+            <button className="btn btn-primary btn-add-user" onClick={() => openModal()}>
+              <FontAwesomeIcon icon={faPlus} className="me-2" />
+              Nouveau Ticket
+            </button>
+            <Button variant="outline-light" className="btn-logout-user" onClick={handleLogout}>
+              Déconnexion
+            </Button>
+          </div>
+        </div>
       </div>
-      <Button className="mb-3" onClick={() => openModal()}>
-        <FontAwesomeIcon icon={faPlus} className="me-2" />
-        Nouveau Ticket
-      </Button>
-      <div className="mb-3">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Rechercher..."
-          value={search}
-          onChange={handleSearchChange}
-        />
-      </div>
-      <div className="table-responsive w-100">
+
+      {/* Conteneur de la table - Même style que admin */}
+      <div style={{ 
+        background: '#1a1a2e',
+        border: '1px solid #2d2d44',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+        width: '100%',
+        margin: '0 auto',
+        borderRadius: '12px',
+        padding: '24px',
+        marginTop: '1.5rem'
+      }}>
         <div className="d-flex justify-content-between align-items-center px-3 pt-3">
           <div className="d-flex align-items-center gap-2">
-            <select className="form-select form-select-sm w-auto" value={ticketItemsPerPage} onChange={e => { setTicketItemsPerPage(Number(e.target.value)); setTicketCurrentPage(1); }}>
+            <select className="form-select form-select-sm w-auto dark-select" value={ticketItemsPerPage} onChange={e => { setTicketItemsPerPage(Number(e.target.value)); setTicketCurrentPage(1); }}>
               {[10, 25, 50, 100].map(n => <option key={n} value={n}>{n}</option>)}
             </select>
-            <span className="ms-2">entries per page</span>
+            <span className="ms-2 dark-text">entries per page</span>
           </div>
           <div className="d-flex align-items-center gap-2">
-            <span className="me-2">Search:</span>
+            <span className="me-2 dark-text">Search:</span>
             <input
               type="text"
-              className="form-control form-control-sm w-auto"
+              className="form-control form-control-sm w-auto dark-input"
               placeholder="Rechercher..."
               value={search}
               onChange={e => { setSearch(e.target.value); setTicketCurrentPage(1); }}
             />
           </div>
         </div>
-        <table className="table table-bordered align-middle mb-0 mt-2 w-100">
-          <thead className="table-light align-middle">
-            <tr>
-              {ticketColumns.map(col => (
-                <th key={col.key} style={{ fontWeight: 'bold', textAlign: 'center', verticalAlign: 'middle', minWidth: col.key === 'id' ? 50 : col.key === 'equipement' ? 70 : 90, width: col.key === 'id' ? 50 : col.key === 'equipement' ? 70 : undefined, maxWidth: col.key === 'equipement' ? 70 : undefined, overflow: col.key === 'equipement' ? 'hidden' : undefined, textOverflow: col.key === 'equipement' ? 'ellipsis' : undefined }}>
-                  <div>{col.label}</div>
-                  <div className="d-flex justify-content-center align-items-center mt-1" style={{gap: '0.3rem'}}>
-                    <span style={{fontSize: '1rem', cursor: 'pointer'}} onClick={() => handleTicketSort(col.key)}>{renderTicketSortIcon(col.key)}</span>
-                    <span ref={ticketPopoverRefs[col.key]} style={{fontSize: '1rem', cursor: 'pointer'}}>
-                      <FontAwesomeIcon icon={faBars} className="text-secondary" onClick={e => { e.stopPropagation(); setTicketPopoverCol(ticketPopoverCol === col.key ? null : col.key); }} />
-                    </span>
-                    <Overlay show={ticketPopoverCol === col.key} target={ticketPopoverRefs[col.key].current} placement="bottom" containerPadding={20} rootClose onHide={() => setTicketPopoverCol(null)}>
-                      {renderTicketFilterPopover(col.key)}
-                    </Overlay>
-                  </div>
-                </th>
-              ))}
-              <th className="text-center" style={{ fontWeight: 'bold', verticalAlign: 'middle' }}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ticketPaginated.length === 0 ? (
-              <tr><td colSpan={ticketColumns.length + 1} className="text-center">Aucun ticket à afficher.</td></tr>
-            ) : ticketPaginated.map((ticket) => (
-              <tr key={ticket.id}>
+        <div className="table-responsive" style={{ 
+          width: '100%', 
+          maxWidth: 'none', 
+          overflow: 'visible',
+          margin: '0',
+          padding: '0'
+        }}>
+          <table className="table table-bordered align-middle mb-0 mt-2 w-100 user-table dark-table" style={{ 
+            width: '100%', 
+            minWidth: '100%', 
+            maxWidth: 'none',
+            tableLayout: 'auto'
+          }}>
+            <thead className="dark-thead align-middle">
+              <tr>
                 {ticketColumns.map(col => (
-                  <td key={col.key} style={{ textAlign: 'center', maxWidth: col.key === 'equipement' ? 70 : undefined, overflow: col.key === 'equipement' ? 'hidden' : undefined, textOverflow: col.key === 'equipement' ? 'ellipsis' : undefined }}>
-                    {col.key === 'user' ? (ticket.user ? ticket.user.username : 'N/A') : ticket[col.key]}
-                  </td>
-                ))}
-                <td className="text-center">
-                  <div className="d-flex justify-content-center align-items-center" style={{gap: '0.5rem'}}>
-                    <span
-                      className="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center"
-                      style={{ width: 36, height: 36, fontSize: '1.2rem', cursor: 'pointer' }}
-                      title="Modifier"
-                      onClick={() => openModal(ticket)}
-                    >
-                      <FontAwesomeIcon icon={faPen} />
-                    </span>
-                    {/* Pas de suppression si pas admin */}
-                    {userRole === "ADMIN" && (
-                      <span
-                        className="bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center"
-                        style={{ width: 36, height: 36, fontSize: '1.2rem', cursor: 'pointer' }}
-                        title="Supprimer"
-                        onClick={() => handleDelete(ticket.id)}
-                      >
-                        <FontAwesomeIcon icon={faTrash} />
+                  <th key={col.key} className="dark-th">
+                    <div>{col.label}</div>
+                    <div className="d-flex justify-content-center align-items-center mt-1" style={{gap: '0.3rem'}}>
+                      <span style={{fontSize: '1rem', cursor: 'pointer'}} onClick={() => handleTicketSort(col.key)}>{renderTicketSortIcon(col.key)}</span>
+                      <span ref={ticketPopoverRefs[col.key]} style={{fontSize: '1rem', cursor: 'pointer'}}>
+                        <FontAwesomeIcon icon={faBars} className="text-secondary" onClick={e => { e.stopPropagation(); setTicketPopoverCol(ticketPopoverCol === col.key ? null : col.key); }} />
                       </span>
-                    )}
-                  </div>
-                </td>
+                      <Overlay show={ticketPopoverCol === col.key} target={ticketPopoverRefs[col.key].current} placement="bottom" containerPadding={20} rootClose onHide={() => setTicketPopoverCol(null)}>
+                        {renderTicketFilterPopover(col.key)}
+                      </Overlay>
+                    </div>
+                  </th>
+                ))}
+                <th className="text-center dark-th">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="dark-tbody">
+              {ticketPaginated.length === 0 ? (
+                <tr><td colSpan={ticketColumns.length + 1} className="text-center dark-text">Aucun ticket à afficher.</td></tr>
+              ) : ticketPaginated.map((ticket) => (
+                <tr key={ticket.id} className="dark-tr">
+                  {ticketColumns.map(col => (
+                    <td key={col.key} className="dark-td">
+                      {col.key === 'user' ? (ticket.user ? ticket.user.username : 'N/A') : ticket[col.key]}
+                    </td>
+                  ))}
+                  <td className="text-center">
+                    <div className="d-flex justify-content-center align-items-center" style={{gap: '0.5rem'}}>
+                      <span
+                        className="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center"
+                        style={{ width: 36, height: 36, fontSize: '1.2rem', cursor: 'pointer' }}
+                        title="Modifier"
+                        onClick={() => openModal(ticket)}
+                      >
+                        <FontAwesomeIcon icon={faPen} />
+                      </span>
+                      {/* Pas de suppression si pas admin */}
+                      {userRole === "ADMIN" && (
+                        <span
+                          className="bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center"
+                          style={{ width: 36, height: 36, fontSize: '1.2rem', cursor: 'pointer' }}
+                          title="Supprimer"
+                          onClick={() => handleDelete(ticket.id)}
+                        >
+                          <FontAwesomeIcon icon={faTrash} />
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         {ticketPageCount > 1 && (
           <nav className="mt-2">
-            <ul className="pagination justify-content-center mb-0">
+            <ul className="pagination justify-content-center mb-0 dark-pagination">
               <li className={`page-item${ticketCurrentPage === 1 ? " disabled" : ""}`}>
-                <button className="page-link" onClick={() => setTicketCurrentPage(ticketCurrentPage - 1)} disabled={ticketCurrentPage === 1}>&laquo;</button>
+                <button className="page-link dark-page-link" onClick={() => setTicketCurrentPage(ticketCurrentPage - 1)} disabled={ticketCurrentPage === 1}>&laquo;</button>
               </li>
               {[...Array(ticketPageCount)].map((_, idx) => (
                 <li key={idx + 1} className={`page-item${ticketCurrentPage === idx + 1 ? " active" : ""}`}>
-                  <button className="page-link" onClick={() => setTicketCurrentPage(idx + 1)}>{idx + 1}</button>
+                  <button className="page-link dark-page-link" onClick={() => setTicketCurrentPage(ticketCurrentPage + 1)}>{idx + 1}</button>
                 </li>
               ))}
               <li className={`page-item${ticketCurrentPage === ticketPageCount ? " disabled" : ""}`}>
-                <button className="page-link" onClick={() => setTicketCurrentPage(ticketCurrentPage + 1)} disabled={ticketCurrentPage === ticketPageCount}>&raquo;</button>
+                <button className="page-link dark-page-link" onClick={() => setTicketCurrentPage(ticketCurrentPage + 1)} disabled={ticketCurrentPage === ticketPageCount}>&laquo;</button>
               </li>
             </ul>
           </nav>
         )}
       </div>
-      {/* Pagination supprimée ici (déjà gérée en bas du tableau) */}
+
+      {/* Modales */}
       <TicketModal
         show={showModal}
         onHide={() => setShowModal(false)}

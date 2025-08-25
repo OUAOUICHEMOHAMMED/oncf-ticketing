@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './UserTable.css';
-import { faPen, faTrash, faSort, faSortUp, faSortDown, faBars } from '@fortawesome/free-solid-svg-icons';
+import { faPen, faTrash, faSort, faSortUp, faSortDown, faBars, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { Overlay, Popover, Button, Form, Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 function UserTable({ users = [], onEdit, onDelete, onAdd }) {
@@ -112,107 +112,121 @@ function UserTable({ users = [], onEdit, onDelete, onAdd }) {
   ];
 
   return (
-    <div className="card mt-4 user-table" style={{ maxWidth: 1200, margin: '32px auto', background: '#fff', borderRadius: 12, boxShadow: '0 2px 16px rgba(0,0,0,0.08)', padding: 24 }}>
-      <div className="d-flex justify-content-between align-items-center px-3 pt-3">
-        <div className="d-flex align-items-center gap-2">
-          <select className="form-select form-select-sm w-auto" value={itemsPerPage} onChange={e => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}>
-            {[10, 25, 50, 100].map(n => <option key={n} value={n}>{n}</option>)}
-          </select>
-          <span className="ms-2">entries per page</span>
-        </div>
-        <div className="d-flex align-items-center gap-2">
-          <span className="me-2">Search:</span>
-          <input
-            type="text"
-            className="form-control form-control-sm w-auto"
-            placeholder="Rechercher..."
-            value={search}
-            onChange={e => { setSearch(e.target.value); setCurrentPage(1); }}
-          />
-          <button className="btn btn-success btn-sm ms-2" onClick={() => onAdd && onAdd()}>
-            + Ajouter utilisateur
+    <div className="user-table-container">
+      {/* En-tête avec titre et bouton principal */}
+      <div className="user-header-section">
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <h2 className="user-title">Gestion des Utilisateurs</h2>
+            <p className="user-subtitle">Vue d'ensemble et administration des comptes utilisateurs</p>
+          </div>
+          <button className="btn btn-primary btn-add-user" onClick={() => onAdd && onAdd()}>
+            <FontAwesomeIcon icon={faUserPlus} className="me-2" />
+            + Nouvel Utilisateur
           </button>
         </div>
       </div>
-      <div className="table-responsive">
-        <table className="table table-bordered align-middle mb-0 mt-2 w-100 user-table-modern">
-          <thead className="table-light align-middle">
-            <tr>
-              {columns.map(col => (
-                <th key={col.key} style={{ fontWeight: 'bold', textAlign: 'center', verticalAlign: 'middle', minWidth: col.key === 'id' ? 50 : col.key === 'email' ? 90 : 90, width: col.key === 'id' ? 50 : col.key === 'email' ? 90 : undefined, maxWidth: col.key === 'email' ? 90 : undefined, overflow: col.key === 'email' ? 'hidden' : undefined, textOverflow: col.key === 'email' ? 'ellipsis' : undefined }}>
-                  <div>{col.label}</div>
-                  <div className="d-flex justify-content-center align-items-center mt-1" style={{gap: '0.3rem'}}>
-                    <span style={{fontSize: '1rem', cursor: 'pointer'}} onClick={() => handleSort(col.key)}>{renderSortIcon(col.key)}</span>
-                    <span ref={popoverRefs[col.key]} style={{fontSize: '1rem', cursor: 'pointer'}}>
-                      <FontAwesomeIcon icon={faBars} className="text-secondary" onClick={e => { e.stopPropagation(); setPopoverCol(popoverCol === col.key ? null : col.key); }} />
-                    </span>
-                    <Overlay show={popoverCol === col.key} target={popoverRefs[col.key].current} placement="bottom" containerPadding={20} rootClose onHide={() => setPopoverCol(null)}>
-                      {renderFilterPopover(col.key)}
-                    </Overlay>
-                  </div>
-                </th>
-              ))}
-              <th className="text-center" style={{ fontWeight: 'bold', verticalAlign: 'middle' }}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paginated.length === 0 ? (
-              <tr><td colSpan={columns.length + 1} className="text-center">Aucun utilisateur</td></tr>
-            ) : paginated.map((user, idx) => (
-              <tr key={user.id}>
+
+      {/* Conteneur de la table */}
+      <div className="card mt-4 user-table dark-theme">
+        <div className="d-flex justify-content-between align-items-center px-3 pt-3">
+          <div className="d-flex align-items-center gap-2">
+            <select className="form-select form-select-sm w-auto dark-select" value={itemsPerPage} onChange={e => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}>
+              {[10, 25, 50, 100].map(n => <option key={n} value={n}>{n}</option>)}
+            </select>
+            <span className="ms-2 dark-text">entries per page</span>
+          </div>
+          <div className="d-flex align-items-center gap-2">
+            <span className="me-2 dark-text">Search:</span>
+            <input
+              type="text"
+              className="form-control form-control-sm w-auto dark-input"
+              placeholder="Rechercher..."
+              value={search}
+              onChange={e => { setSearch(e.target.value); setCurrentPage(1); }}
+            />
+          </div>
+        </div>
+        <div className="table-responsive">
+          <table className="table table-bordered align-middle mb-0 mt-2 w-100 user-table-modern dark-table">
+            <thead className="dark-thead align-middle">
+              <tr>
                 {columns.map(col => (
-                  <td key={col.key} style={{ textAlign: 'center', verticalAlign: 'middle', minWidth: col.key === 'id' ? 50 : col.key === 'email' ? 90 : 90, maxWidth: col.key === 'email' ? 120 : undefined, overflow: col.key === 'email' ? 'hidden' : undefined, textOverflow: col.key === 'email' ? 'ellipsis' : undefined, whiteSpace: col.key === 'email' ? 'nowrap' : undefined }}>
-                    {col.key === 'email' && user[col.key] && user[col.key] !== '-' ? (
-                      <OverlayTrigger placement="top" overlay={<Tooltip>{user[col.key]}</Tooltip>}>
-                        <span style={{ display: 'inline-block', maxWidth: 110, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', verticalAlign: 'middle' }}>{user[col.key]}</span>
-                      </OverlayTrigger>
-                    ) : (
-                      user[col.key] || '-'
-                    )}
-                  </td>
+                  <th key={col.key} className="dark-th">
+                    <div>{col.label}</div>
+                    <div className="d-flex justify-content-center align-items-center mt-1" style={{gap: '0.3rem'}}>
+                      <span style={{fontSize: '1rem', cursor: 'pointer'}} onClick={() => handleSort(col.key)}>{renderSortIcon(col.key)}</span>
+                      <span ref={popoverRefs[col.key]} style={{fontSize: '1rem', cursor: 'pointer'}}>
+                        <FontAwesomeIcon icon={faBars} className="text-secondary" onClick={e => { e.stopPropagation(); setPopoverCol(popoverCol === col.key ? null : col.key); }} />
+                      </span>
+                      <Overlay show={popoverCol === col.key} target={popoverRefs[col.key].current} placement="bottom" containerPadding={20} rootClose onHide={() => setPopoverCol(null)}>
+                        {renderFilterPopover(col.key)}
+                      </Overlay>
+                    </div>
+                  </th>
                 ))}
-                <td className="text-center">
-                  <div className="d-flex justify-content-center align-items-center" style={{gap: '0.5rem'}}>
-                    <span
-                      className="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center"
-                      style={{ width: 36, height: 36, fontSize: '1.2rem', cursor: 'pointer' }}
-                      title="Modifier"
-                      onClick={() => onEdit && onEdit(user)}
-                    >
-                      <FontAwesomeIcon icon={faPen} />
-                    </span>
-                    <span
-                      className="bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center"
-                      style={{ width: 36, height: 36, fontSize: '1.2rem', cursor: 'pointer' }}
-                      title="Supprimer"
-                      onClick={() => onDelete && onDelete(user)}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </span>
-                  </div>
-                </td>
+                <th className="text-center dark-th">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      {pageCount > 1 && (
-        <nav className="mt-2">
-          <ul className="pagination justify-content-center mb-0">
-            <li className={`page-item${currentPage === 1 ? " disabled" : ""}`}>
-              <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>&laquo;</button>
-            </li>
-            {[...Array(pageCount)].map((_, idx) => (
-              <li key={idx + 1} className={`page-item${currentPage === idx + 1 ? " active" : ""}`}>
-                <button className="page-link" onClick={() => setCurrentPage(idx + 1)}>{idx + 1}</button>
+            </thead>
+            <tbody className="dark-tbody">
+              {paginated.length === 0 ? (
+                <tr><td colSpan={columns.length + 1} className="text-center dark-text">Aucun utilisateur</td></tr>
+              ) : paginated.map((user, idx) => (
+                <tr key={user.id} className="dark-tr">
+                  {columns.map(col => (
+                    <td key={col.key} className="dark-td">
+                      {col.key === 'email' && user[col.key] && user[col.key] !== '-' ? (
+                        <OverlayTrigger placement="top" overlay={<Tooltip>{user[col.key]}</Tooltip>}>
+                          <span style={{ display: 'inline-block', maxWidth: 110, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', verticalAlign: 'middle' }}>{user[col.key]}</span>
+                        </OverlayTrigger>
+                      ) : (
+                        user[col.key] || '-'
+                      )}
+                    </td>
+                  ))}
+                  <td className="text-center">
+                    <div className="d-flex justify-content-center align-items-center" style={{gap: '0.5rem'}}>
+                      <span
+                        className="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center"
+                        style={{ width: 36, height: 36, fontSize: '1.2rem', cursor: 'pointer' }}
+                        title="Modifier"
+                        onClick={() => onEdit && onEdit(user)}
+                      >
+                        <FontAwesomeIcon icon={faPen} />
+                      </span>
+                      <span
+                        className="bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center"
+                        style={{ width: 36, height: 36, fontSize: '1.2rem', cursor: 'pointer' }}
+                        title="Supprimer"
+                        onClick={() => onDelete && onDelete(user)}
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </span>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {pageCount > 1 && (
+          <nav className="mt-2">
+            <ul className="pagination justify-content-center mb-0 dark-pagination">
+              <li className={`page-item${currentPage === 1 ? " disabled" : ""}`}>
+                <button className="page-link dark-page-link" onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>&laquo;</button>
               </li>
-            ))}
-            <li className={`page-item${currentPage === pageCount ? " disabled" : ""}`}>
-              <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === pageCount}>&raquo;</button>
-            </li>
-          </ul>
-        </nav>
-      )}
+              {[...Array(pageCount)].map((_, idx) => (
+                <li key={idx + 1} className={`page-item${currentPage === idx + 1 ? " active" : ""}`}>
+                  <button className="page-link dark-page-link" onClick={() => setCurrentPage(idx + 1)}>{idx + 1}</button>
+                </li>
+              ))}
+              <li className={`page-item${currentPage === pageCount ? " disabled" : ""}`}>
+                <button className="page-link dark-page-link" onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === pageCount}>&raquo;</button>
+              </li>
+            </ul>
+          </nav>
+        )}
+      </div>
     </div>
   );
 }

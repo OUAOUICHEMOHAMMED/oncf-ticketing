@@ -1,0 +1,235 @@
+.reports-page {
+  padding: 20px;
+  background: var(--gradient-primary-dark);
+  min-height: 100vh;
+  color: white;
+}
+
+.reports-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.reports-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: white;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.reports-header p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* Filtres */
+.filters-card {
+  background: rgba(75, 0, 130, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  backdrop-filter: blur(10px);
+}
+
+.filters-card .form-label {
+  color: white;
+  font-weight: bold;
+}
+
+.filters-card .form-select {
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  color: white;
+}
+
+.filters-card .form-select:focus {
+  background: rgba(139, 92, 246, 0.3);
+  border-color: var(--custom-primary);
+  box-shadow: 0 0 0 0.2rem rgba(139, 92, 246, 0.25);
+  color: white;
+}
+
+.filters-card .form-select option {
+  background: var(--gradient-primary-dark);
+  color: white;
+}
+
+/* KPIs */
+.kpi-card {
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(75, 0, 130, 0.3);
+  transition: all 0.3s ease;
+}
+
+.kpi-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(75, 0, 130, 0.4);
+}
+
+.kpi-card .card-body {
+  padding: 25px;
+}
+
+.kpi-icon {
+  font-size: 2.5rem;
+  color: var(--custom-primary-light);
+  margin-bottom: 15px;
+}
+
+.kpi-card h3 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 10px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.kpi-card p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+/* Boutons d'export */
+.btn-success {
+  background: var(--gradient-primary);
+  border: none;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+.btn-success:hover {
+  background: var(--gradient-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  border: none;
+  box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+}
+
+.btn-danger:hover {
+  background: linear-gradient(135deg, #c82333, #a71e2a);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+}
+
+/* Tableaux */
+.card {
+  background: rgba(75, 0, 130, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.card-header {
+  background: var(--gradient-primary);
+  border-bottom: 1px solid rgba(139, 92, 246, 0.4);
+  padding: 15px 20px;
+}
+
+.card-header h5 {
+  color: white;
+  margin: 0;
+  font-weight: bold;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+/* Tableaux Bootstrap */
+.table {
+  color: white;
+  margin: 0;
+}
+
+.table thead th {
+  background: rgba(139, 92, 246, 0.3);
+  border-color: rgba(139, 92, 246, 0.4);
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+
+.table tbody td {
+  border-color: rgba(139, 92, 246, 0.3);
+  vertical-align: middle;
+}
+
+.table tbody tr:hover {
+  background: rgba(139, 92, 246, 0.1);
+}
+
+/* Badges */
+.badge {
+  font-size: 0.85rem;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.badge.bg-success {
+  background: linear-gradient(135deg, #28a745, #20c997) !important;
+}
+
+.badge.bg-warning {
+  background: linear-gradient(135deg, #ffc107, #fd7e14) !important;
+  color: #212529 !important;
+}
+
+.badge.bg-danger {
+  background: linear-gradient(135deg, #dc3545, #c82333) !important;
+}
+
+.badge.bg-info {
+  background: linear-gradient(135deg, #17a2b8, #6f42c1) !important;
+}
+
+.badge.bg-secondary {
+  background: linear-gradient(135deg, #6c757d, #495057) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .reports-header h1 {
+    font-size: 2rem;
+  }
+  
+  .kpi-card h3 {
+    font-size: 2rem;
+  }
+  
+  .filters-card .row > div {
+    margin-bottom: 15px;
+  }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reports-page > * {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.reports-page > *:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.reports-page > *:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.reports-page > *:nth-child(4) {
+  animation-delay: 0.3s;
+}

@@ -66,7 +66,7 @@ function Dashboard({
 
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  
+
   // États pour les dates de filtrage
   const [startDate, setStartDate] = useState(() => {
     const today = new Date();
@@ -953,16 +953,16 @@ function Dashboard({
                 />
               </div>
               <div className="d-flex align-items-center gap-2">
-                <div className="d-flex flex-column">
-                  <label className="small text-white-50 mb-2">Date de fin</label>
-                  <input 
-                    type="date" 
-                    className="form-control form-control-sm" 
+              <div className="d-flex flex-column">
+                <label className="small text-white-50 mb-2">Date de fin</label>
+                <input 
+                  type="date" 
+                  className="form-control form-control-sm" 
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
-                    style={{ width: '160px', height: '40px' }}
-                  />
-                </div>
+                  style={{ width: '160px', height: '40px' }}
+                />
+              </div>
                 <div className="d-flex flex-column justify-content-end">
                   <button 
                     className="btn btn-primary btn-sm px-3 py-2" 
@@ -1217,29 +1217,29 @@ function Dashboard({
                     <div key={index} className="list-group-item d-flex align-items-center py-3">
                       <div className={`bg-${notification.type} rounded-circle d-flex align-items-center justify-content-center me-3`} style={{ width: '40px', height: '40px' }}>
                         <FontAwesomeIcon icon={notification.icon} className="text-white" />
-                      </div>
-                      <div className="flex-grow-1">
+                    </div>
+                    <div className="flex-grow-1">
                         <h6 className="mb-1">{notification.title}</h6>
                         <p className="mb-1 text-muted">{notification.description}</p>
                         <small className={`text-${notification.type}`}>{notification.status}</small>
-                      </div>
+                    </div>
                       <button 
                         className={`btn btn-sm btn-outline-${notification.buttonType}`}
                         onClick={notification.action}
                       >
                         {notification.buttonText}
                       </button>
-                    </div>
+                  </div>
                   ))}
-                </div>
+                    </div>
                 {getNotificationCount() === 0 && (
                   <div className="text-center py-4">
                     <FontAwesomeIcon icon={faCheckCircle} className="text-success mb-2" style={{ fontSize: '2rem' }} />
                     <p className="text-muted mb-0">Aucune alerte en cours</p>
                     <small className="text-muted">Tous les systèmes fonctionnent normalement</small>
-                  </div>
+                    </div>
                 )}
-              </div>
+                  </div>
             </div>
           </div>
           

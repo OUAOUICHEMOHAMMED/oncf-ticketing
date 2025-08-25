@@ -143,3 +143,425 @@
   background-origin: border-box !important;
   background-clip: padding-box, border-box !important;
 }
+
+/* Styles pour l'interface utilisateur normale - Même style que la page admin */
+
+/* Styles globaux pour forcer la largeur complète */
+* {
+  box-sizing: border-box !important;
+}
+
+body, html, #root, .App {
+  width: 100% !important;
+  max-width: none !important;
+  overflow-x: visible !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Conteneur principal de l'app utilisateur */
+.user-table-container {
+  padding: 20px;
+  background: #f8f9fa;
+  min-height: 100vh;
+  width: 100% !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+}
+
+/* En-tête de l'app utilisateur - Même style que admin */
+.user-header-section {
+  background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 50%, #8B5CF6 100%);
+  padding: 30px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  width: 100% !important;
+}
+
+.user-title {
+  color: white !important;
+  font-size: 2.5rem !important;
+  font-weight: 700 !important;
+  margin-bottom: 8px !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+.user-subtitle {
+  color: #e0e0e0 !important;
+  font-size: 1.1rem !important;
+  margin-bottom: 0 !important;
+  opacity: 0.9 !important;
+}
+
+/* Bouton de déconnexion utilisateur */
+.btn-logout-user {
+  background: transparent !important;
+  border: 2px solid #e0e0e0 !important;
+  color: #e0e0e0 !important;
+  font-weight: 600 !important;
+  padding: 10px 20px !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-logout-user:hover {
+  background: #e0e0e0 !important;
+  color: #1a1a2e !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(224, 224, 224, 0.3) !important;
+}
+
+/* Bouton d'ajout d'utilisateur - Même style que admin */
+.btn-add-user {
+  background: var(--gradient-primary) !important;
+  background-color: #8B5CF6 !important;
+  border: none !important;
+  color: white !important;
+  font-weight: 600 !important;
+  font-size: 1.1rem !important;
+  padding: 12px 24px !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3) !important;
+}
+
+.btn-add-user:hover {
+  background: var(--gradient-primary-hover) !important;
+  background-color: #7C3AED !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4) !important;
+}
+
+.btn-add-user:focus {
+  background: var(--gradient-primary-hover) !important;
+  background-color: #7C3AED !important;
+  box-shadow: 0 0 0 0.2rem rgba(139, 92, 246, 0.25) !important;
+}
+
+/* Thème sombre pour UserTable - Même style que admin */
+.user-table-container .user-table.dark-theme {
+  background: #1a1a2e !important;
+  border: 1px solid #2d2d44 !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 auto !important;
+  border-radius: 12px !important;
+  padding: 24px !important;
+  box-sizing: border-box !important;
+}
+
+.user-table-container .user-table.dark-theme .dark-text {
+  color: #e0e0e0 !important;
+}
+
+.user-table-container .user-table.dark-theme .dark-input,
+.user-table-container .user-table.dark-theme .dark-select {
+  background: #2d2d44 !important;
+  border: 1px solid #4a4a6a !important;
+  color: #e0e0e0 !important;
+}
+
+.user-table-container .user-table.dark-theme .dark-input:focus,
+.user-table-container .user-table.dark-theme .dark-select:focus {
+  background: #2d2d44 !important;
+  border-color: #8B5CF6 !important;
+  box-shadow: 0 0 0 0.2rem rgba(139, 92, 246, 0.25) !important;
+}
+
+/* Garder l'intérieur du tableau en blanc - EXACTEMENT comme les tables admin */
+.user-table-container .user-table.dark-theme .dark-table {
+  background: white !important;
+  color: #333 !important;
+  width: 100% !important;
+  min-width: 100% !important;
+  table-layout: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.user-table-container .user-table.dark-theme .dark-thead {
+  background: #2d2d44 !important;
+  border-bottom: 2px solid #8B5CF6 !important;
+}
+
+.user-table-container .user-table.dark-theme .dark-th {
+  background: #2d2d44 !important;
+  color: #e0e0e0 !important;
+  border: 1px solid #4a4a6a !important;
+  font-weight: bold !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+  padding: 12px 8px !important;
+}
+
+/* Les cellules de données restent blanches - EXACTEMENT comme les tables admin */
+.user-table-container .user-table.dark-theme .dark-tbody {
+  background: white !important;
+}
+
+.user-table-container .user-table.dark-theme .dark-tr {
+  background: white !important;
+  border-bottom: 1px solid #dee2e6 !important;
+}
+
+.user-table-container .user-table.dark-theme .dark-tr:hover {
+  background: #f8f9fa !important;
+}
+
+.user-table-container .user-table.dark-theme .dark-td {
+  background: white !important;
+  color: #333 !important;
+  border: 1px solid #dee2e6 !important;
+  padding: 12px 8px !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+}
+
+.user-table-container .user-table.dark-theme .dark-pagination .page-link {
+  background: #2d2d44 !important;
+  border: 1px solid #4a4a6a !important;
+  color: #e0e0e0 !important;
+}
+
+.user-table-container .user-table.dark-theme .dark-pagination .page-link:hover {
+  background: #4a4a6a !important;
+  border-color: #8B5CF6 !important;
+  color: #e0e0e0 !important;
+}
+
+.user-table-container .user-table.dark-theme .dark-pagination .page-item.active .page-link {
+  background: var(--gradient-primary) !important;
+  background-color: #8B5CF6 !important;
+  border-color: #8B5CF6 !important;
+  color: white !important;
+}
+
+.user-table-container .user-table.dark-theme .dark-pagination .page-item.disabled .page-link {
+  background: #1a1a2e !important;
+  border-color: #4a4a6a !important;
+  color: #6c6c8a !important;
+}
+
+/* Styles pour les icônes de tri */
+.user-table-container .user-table.dark-theme .text-secondary {
+  color: #8B5CF6 !important;
+}
+
+.user-table-container .user-table.dark-theme .text-primary {
+  color: #8B5CF6 !important;
+}
+
+/* Animation d'entrée */
+.user-table-container .user-table.dark-theme {
+  animation: slideInUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animation pour l'en-tête */
+.user-header-section {
+  animation: fadeInDown 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Styles pour forcer la largeur complète de la table */
+.user-table-container .user-table.dark-theme .table-responsive {
+  width: 100% !important;
+  max-width: none !important;
+  overflow-x: visible !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.user-table-container .user-table.dark-theme .table {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  table-layout: auto !important;
+}
+
+/* Supprimer les contraintes Bootstrap */
+.user-table-container .user-table.dark-theme .container,
+.user-table-container .user-table.dark-theme .container-fluid {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Forcer la largeur des colonnes */
+.user-table-container .user-table.dark-theme .dark-th,
+.user-table-container .user-table.dark-theme .dark-td {
+  width: auto !important;
+  min-width: auto !important;
+  max-width: none !important;
+}
+
+/* Classe CSS personnalisée pour forcer la largeur */
+.force-wide-table {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 100% !important;
+  margin: 0 auto !important;
+  position: relative !important;
+}
+
+.force-wide-table .table-responsive {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 100% !important;
+  overflow: visible !important;
+}
+
+.force-wide-table .table {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 100% !important;
+  table-layout: auto !important;
+}
+
+/* Styles pour étendre la table sur plus de largeur */
+.user-table-container .user-table.dark-theme {
+  min-width: 100% !important;
+  width: 100% !important;
+}
+
+.user-table-container .user-table.dark-theme .table-responsive {
+  min-width: 100% !important;
+  width: 100% !important;
+}
+
+.user-table-container .user-table.dark-theme .table {
+  min-width: 100% !important;
+  width: 100% !important;
+}
+
+/* Styles très spécifiques pour forcer l'apparence de la table */
+.table-responsive {
+  width: 100% !important;
+  max-width: none !important;
+  overflow: visible !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.table {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  table-layout: auto !important;
+}
+
+/* Styles pour l'en-tête de la table */
+.table thead th {
+  background: #2d2d44 !important;
+  color: #e0e0e0 !important;
+  border: 1px solid #4a4a6a !important;
+  font-weight: bold !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+  padding: 12px 8px !important;
+}
+
+/* Styles pour le corps de la table */
+.table tbody {
+  background: white !important;
+}
+
+.table tbody tr {
+  background: white !important;
+  border-bottom: 1px solid #dee2e6 !important;
+}
+
+.table tbody tr:hover {
+  background: #f8f9fa !important;
+}
+
+.table tbody td {
+  background: white !important;
+  color: #333 !important;
+  border: 1px solid #dee2e6 !important;
+  padding: 12px 8px !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+}
+
+/* Styles pour les contrôles de la table */
+.dark-select, .dark-input, .dark-text {
+  background: #2d2d44 !important;
+  border: 1px solid #4a4a6a !important;
+  color: #e0e0e0 !important;
+}
+
+.dark-select:focus, .dark-input:focus {
+  background: #2d2d44 !important;
+  border-color: #8B5CF6 !important;
+  box-shadow: 0 0 0 0.2rem rgba(139, 92, 246, 0.25) !important;
+}
+
+/* Styles pour les boutons */
+.btn-add-user {
+  background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%) !important;
+  border: none !important;
+  color: white !important;
+  font-weight: 600 !important;
+  font-size: 1.1rem !important;
+  padding: 12px 24px !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3) !important;
+}
+
+.btn-add-user:hover {
+  background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4) !important;
+}
+
+.btn-logout-user {
+  background: transparent !important;
+  border: 2px solid #e0e0e0 !important;
+  color: #e0e0e0 !important;
+  font-weight: 600 !important;
+  padding: 10px 20px !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-logout-user:hover {
+  background: #e0e0e0 !important;
+  color: #1a1a2e !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(224, 224, 224, 0.3) !important;
+}

@@ -128,19 +128,19 @@ function TicketTable({ tickets = [], users = [], onEdit, onDelete }) {
   ];
 
   return (
-    <div className="card mt-4 ticket-table">
+    <div className="card mt-4 ticket-table dark-theme">
       <div className="d-flex justify-content-between align-items-center px-3 pt-3">
         <div className="d-flex align-items-center gap-2">
-          <select className="form-select form-select-sm w-auto" value={itemsPerPage} onChange={e => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}>
+          <select className="form-select form-select-sm w-auto dark-select" value={itemsPerPage} onChange={e => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}>
             {[10, 25, 50, 100].map(n => <option key={n} value={n}>{n}</option>)}
           </select>
-          <span className="ms-2">entries per page</span>
+          <span className="ms-2 dark-text">entries per page</span>
         </div>
         <div className="d-flex align-items-center gap-2">
-          <span className="me-2">Search:</span>
+          <span className="me-2 dark-text">Search:</span>
           <input
             type="text"
-            className="form-control form-control-sm w-auto"
+            className="form-control form-control-sm w-auto dark-input"
             placeholder="Rechercher..."
             value={search}
             onChange={e => { setSearch(e.target.value); setCurrentPage(1); }}
@@ -148,11 +148,11 @@ function TicketTable({ tickets = [], users = [], onEdit, onDelete }) {
         </div>
       </div>
       <div className="table-responsive">
-        <table className="table table-bordered align-middle mb-0 mt-2">
-          <thead className="table-light align-middle">
+        <table className="table table-bordered align-middle mb-0 mt-2 dark-table">
+          <thead className="dark-thead align-middle">
             <tr>
               {columns.map(col => (
-                <th key={col.key} style={{ fontWeight: 'bold', textAlign: 'center', verticalAlign: 'middle', minWidth: col.key === 'id' ? 50 : col.key === 'equipement' ? 70 : 90, width: col.key === 'id' ? 50 : col.key === 'equipement' ? 70 : undefined, maxWidth: col.key === 'equipement' ? 70 : undefined, overflow: col.key === 'equipement' ? 'hidden' : undefined, textOverflow: col.key === 'equipement' ? 'ellipsis' : undefined }}>
+                <th key={col.key} className="dark-th">
                   <div>{col.label}</div>
                   <div className="d-flex justify-content-center align-items-center mt-1" style={{gap: '0.3rem'}}>
                     <span style={{fontSize: '1rem', cursor: 'pointer'}} onClick={() => handleSort(col.key)}>{renderSortIcon(col.key)}</span>
@@ -165,16 +165,16 @@ function TicketTable({ tickets = [], users = [], onEdit, onDelete }) {
                   </div>
                 </th>
               ))}
-              <th className="text-center" style={{ fontWeight: 'bold', verticalAlign: 'middle' }}>Actions</th>
+              <th className="text-center dark-th">Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="dark-tbody">
             {paginated.length === 0 ? (
-              <tr><td colSpan={columns.length + 1} className="text-center">Aucun ticket</td></tr>
+              <tr><td colSpan={columns.length + 1} className="text-center dark-text">Aucun ticket</td></tr>
             ) : paginated.map((ticket, idx) => (
-              <tr key={ticket.id}>
+              <tr key={ticket.id} className="dark-tr">
                 {columns.map(col => (
-                  <td key={col.key}>
+                  <td key={col.key} className="dark-td">
                     {col.key === 'user' ? (ticket.user ? ticket.user.username : 'N/A') : ticket[col.key]}
                   </td>
                 ))}
@@ -205,17 +205,17 @@ function TicketTable({ tickets = [], users = [], onEdit, onDelete }) {
       </div>
       {pageCount > 1 && (
         <nav className="mt-2">
-          <ul className="pagination justify-content-center mb-0">
+          <ul className="pagination justify-content-center mb-0 dark-pagination">
             <li className={`page-item${currentPage === 1 ? " disabled" : ""}`}>
-              <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>&laquo;</button>
+              <button className="page-link dark-page-link" onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>&laquo;</button>
             </li>
             {[...Array(pageCount)].map((_, idx) => (
               <li key={idx + 1} className={`page-item${currentPage === idx + 1 ? " active" : ""}`}>
-                <button className="page-link" onClick={() => setCurrentPage(idx + 1)}>{idx + 1}</button>
+                <button className="page-link dark-page-link" onClick={() => setCurrentPage(idx + 1)}>{idx + 1}</button>
               </li>
             ))}
             <li className={`page-item${currentPage === pageCount ? " disabled" : ""}`}>
-              <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === pageCount}>&raquo;</button>
+              <button className="page-link dark-page-link" onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === pageCount}>&raquo;</button>
             </li>
           </ul>
         </nav>

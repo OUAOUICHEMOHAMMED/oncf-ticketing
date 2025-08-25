@@ -6,6 +6,8 @@ import UserTable from './UserTable';
 import TicketTable from './TicketTable';
 import axios from 'axios';
 import { Modal, Button, Form } from 'react-bootstrap';
+import MapPage from './MapPage';
+import ReportsPage from './ReportsPage';
 
 const username = localStorage.getItem('username');
 const password = localStorage.getItem('password');
@@ -303,9 +305,11 @@ function AdminPage({ onLogout, currentUsername }) {
               onLogout={onLogout}
             />
           )}
-          {current === 'users' && <UserTable users={users} onEdit={handleEditUser} onDelete={handleDeleteUserConfirm} onAdd={handleAddUser} />}
-          {current === 'tickets' && <TicketTable tickets={tickets} users={users} onEdit={handleEditTicket} onDelete={handleDeleteTicketConfirm} />}
-        </div>
+                      {current === 'users' && <UserTable users={users} onEdit={handleEditUser} onDelete={handleDeleteUserConfirm} onAdd={handleAddUser} />}
+            {current === 'tickets' && <TicketTable tickets={tickets} users={users} onEdit={handleEditTicket} onDelete={handleDeleteTicketConfirm} />}
+            {current === 'map' && <MapPage tickets={tickets} users={users} />}
+            {current === 'reports' && <ReportsPage tickets={tickets} users={users} />}
+          </div>
       </div>
 
       {/* Modale édition utilisateur */}

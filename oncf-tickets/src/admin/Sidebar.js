@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Sidebar.css';
-import { faTachometerAlt, faTicketAlt, faUsers, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faTachometerAlt, faTicketAlt, faUsers, faMap, faChartBar, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 function Sidebar({ current, onNavigate, onLogout }) {
   return (
@@ -26,10 +26,24 @@ function Sidebar({ current, onNavigate, onLogout }) {
               <FontAwesomeIcon icon={faUsers} className="me-2" /> Utilisateurs
             </button>
           </li>
+          
+          {/* Nouveau bouton Carte */}
+          <li className="nav-item">
+            <button className={`nav-link text-white border-0 bg-transparent w-100 text-start ${current === 'map' ? 'active bg-primary' : ''}`} style={{cursor:'pointer'}} onClick={() => onNavigate('map')}>
+              <FontAwesomeIcon icon={faMap} className="me-2" /> Carte
+            </button>
+          </li>
+          
+          {/* Nouveau bouton Rapports */}
+          <li className="nav-item">
+            <button className={`nav-link text-white border-0 bg-transparent w-100 text-start ${current === 'reports' ? 'active bg-primary' : ''}`} style={{cursor:'pointer'}} onClick={() => onNavigate('reports')}>
+              <FontAwesomeIcon icon={faChartBar} className="me-2" /> Rapports
+            </button>
+          </li>
         </ul>
       </div>
       <div className="mb-4 d-flex justify-content-center">
-        <button className="btn btn-danger w-75 d-flex align-items-center justify-content-center" onClick={onLogout}>
+        <button className="btn btn-logout w-75 d-flex align-items-center justify-content-center" onClick={onLogout}>
           <FontAwesomeIcon icon={faSignOutAlt} className="me-2" /> Déconnexion
         </button>
       </div>
